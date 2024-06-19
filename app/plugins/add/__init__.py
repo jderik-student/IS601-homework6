@@ -4,6 +4,7 @@
 '''
 
 from decimal import Decimal
+import logging
 from typing import List
 from app.commands import Command
 from app.calculator import Calculator
@@ -18,4 +19,6 @@ class AddCommand(Command):
 
             @param user_input: a list of Decimals to be added specified by the user, expectation is that there should be only two elements in the list
         """
-        print(f"The result of {user_input[0]} plus {user_input[1]} is equal to {Calculator.add(user_input[0], user_input[1])}")
+        result = Calculator.add(user_input[0], user_input[1])
+        logging.debug("The result of %s plus %s is equal to %s", user_input[0], user_input[1], result)
+        print(f"The result of {user_input[0]} plus {user_input[1]} is equal to {result}")

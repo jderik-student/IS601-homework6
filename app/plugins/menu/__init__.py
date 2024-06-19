@@ -3,7 +3,9 @@
     Defines the REPL command to print all available Commands registered in the Command Handler
 '''
 from decimal import Decimal
+import logging
 from typing import List
+from icecream import ic
 from app.commands import Command
 from app.commands import CommandHandler
 
@@ -26,4 +28,5 @@ class MenuCommand(Command):
 
             @param user_input: not used by this method, added to adhere to Liskov substitution principle
         """
+        logging.debug("Menu Commands: %s", ic.format(self.command_handler.commands))
         self.command_handler.list_commands()

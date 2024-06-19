@@ -3,6 +3,7 @@
     Defines the REPL command to exit program
 '''
 from decimal import Decimal
+import logging
 import sys
 from typing import List
 from app.commands import Command
@@ -18,4 +19,5 @@ class ExitCommand(Command):
 
             @param user_input: not used by this method, added to adhere to Liskov substitution principle
         """
+        logging.debug("User exited App with Exit Command")
         sys.exit("Exiting...")

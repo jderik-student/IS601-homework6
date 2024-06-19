@@ -3,7 +3,9 @@
     Defines the REPL command to get and print the Calculator's History
 '''
 from decimal import Decimal
+import logging
 from typing import List
+from icecream import ic
 from app.commands import Command
 from app.calculator import CalculatorHistory
 
@@ -17,6 +19,7 @@ class GetHistoryCommand(Command):
 
             @param user_input: not used by this method, added to adhere to Liskov substitution principle
         """
+        logging.debug("Calculator History: %s", ic.format(CalculatorHistory.get_history()))
         i = 1
         for calc in CalculatorHistory.get_history():
             print(f"{i}) {calc}")

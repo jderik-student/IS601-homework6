@@ -4,6 +4,7 @@
 '''
 
 from decimal import Decimal
+import logging
 from typing import List
 from app.commands import Command
 from app.calculator import Calculator
@@ -18,4 +19,6 @@ class MultiplyCommand(Command):
 
             @param user_input: a list of Decimals to be multiplied specified by the user, expectation is that there should be only two elements in the list
         """
-        print(f"The result of {user_input[0]} times {user_input[1]} is equal to {Calculator.multiply(user_input[0], user_input[1])}")
+        result = Calculator.multiply(user_input[0], user_input[1])
+        logging.debug("The result of %s times %s is equal to %s", user_input[0], user_input[1], result)
+        print(f"The result of {user_input[0]} times {user_input[1]} is equal to {result}")

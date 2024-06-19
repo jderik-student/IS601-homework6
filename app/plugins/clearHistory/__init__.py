@@ -4,6 +4,7 @@
 '''
 
 from decimal import Decimal
+import logging
 from typing import List
 from app.commands import Command
 from app.calculator import CalculatorHistory
@@ -19,4 +20,5 @@ class ClearHistoryCommand(Command):
 
             @param user_input: not used by this method, added to adhere to Liskov substitution principle
         """
+        logging.debug("History Cleared")
         CalculatorHistory.delete_history()
