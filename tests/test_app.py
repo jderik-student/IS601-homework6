@@ -1,8 +1,10 @@
-# pylint: disable=unnecessary-dunder-call, invalid-name
+# pylint: disable=unnecessary-dunder-call, invalid-name, unused-argument
 '''
     This file contains tests to test app.py
 '''
 
+import logging
+from unittest import mock
 import pytest
 from app import App
 
@@ -14,6 +16,17 @@ def test_app_start_exit_command(monkeypatch):
         app.start()
     assert e.type == SystemExit
     assert str(e.value) == "Exiting...", "The app did not exit as expected"
+
+def test_keyboard_interrupt(monkeypatch, caplog):
+    """Test that the REPL exits correctly with a keyboard interrupt"""
+    monkeypatch.setattr('builtins.input', mock.Mock(side_effect=KeyboardInterrupt))
+    app = App()
+
+    with caplog.at_level(logging.INFO):
+        with pytest.raises(SystemExit) as e:
+            app.start()
+
+    assert e.type == SystemExit
 
 def test_full_app(capfd, monkeypatch):
     """Test that the goes through a sample workflow of the REPL app"""
@@ -42,3 +55,15 @@ def test_full_app(capfd, monkeypatch):
     assert "No such command: notACommand\n" in captured.out
     assert e.type == SystemExit
     assert str(e.value) == "Exiting...", "The app did not exit as expected"
+
+@mock.patch('os.path.exists', return_value=False)
+def test_load_plugins_with_invalid_path(mock_exists, caplog):
+    """Test that the App exits if the Plugin Path does not exist."""
+    app = App()
+
+    with caplog.at_level(logging.WARNING):
+        with pytest.raises(SystemExit) as e:
+            app.start()
+
+    assert e.type == SystemExit
+    assert "Plugins directory" in caplog.text, "The Warning log message was not found"

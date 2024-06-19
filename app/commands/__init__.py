@@ -5,7 +5,9 @@
 
 from abc import ABC, abstractmethod
 from decimal import Decimal, InvalidOperation
+import logging
 from typing import List
+from icecream import ic
 
 class Command(ABC):
     """
@@ -54,13 +56,19 @@ class CommandHandler:
         try:
             if user_input:
                 self.commands[user_input[0]].execute([Decimal(string) for string in user_input[1:3]])
+                logging.info("Command called %s with arguments %s", user_input[0], ic.format(user_input[1:]))
         except IndexError:
             print("ERROR Usage: <operation> <number1> <number2>")
+            logging.error("Index Error | Command: %s Arguments: %s", user_input[0], ic.format(user_input[1:]))
         except ValueError:
             print("Cannot divide by zero")
+            logging.error("Value Error | Command: %s Arguments: %s", user_input[0], ic.format(user_input[1:]))
         except InvalidOperation:
             print(f"Invalid number input: {user_input[1]} or {user_input[2]} is not a valid number.")
+            logging.error("InvalidOperation | Command: %s Arguments: %s", user_input[0], ic.format(user_input[1:]))
         except KeyError:
             print(f"No such command: {user_input[0]}")
+            logging.error("KeyError | Invalid Operatiopn: %s", user_input[0])
         except Exception as e: # Catch-all for unexpected errors
             print(f"An error occurred: {e}") # pragma: no cover
+            logging.error("Error Occured: %s | Command: %s Arguments: %s", ic.format(e), user_input[0], ic.format(user_input[1:])) # pragma: no cover
