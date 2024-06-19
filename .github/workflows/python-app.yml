@@ -2,9 +2,9 @@ name: Calculator App
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "gitHubActions" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "gitHubActions" ]
 
 permissions:
   contents: read
