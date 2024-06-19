@@ -49,7 +49,7 @@ class App:
             Loads environment variables from .env file
         '''
         settings = {key: value for key, value in os.environ.items()}
-        logging.info("Environment variables loaded. %s", settings)
+        logging.info("Environment variables loaded.")
         return settings
 
     def get_environment_variable(self, env_var: str = 'ENVIRONMENT'):
