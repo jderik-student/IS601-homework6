@@ -9,8 +9,6 @@ on:
 permissions:
   contents: read
 
-env: PROD
-
 jobs:
   build:
     runs-on: ubuntu-latest
