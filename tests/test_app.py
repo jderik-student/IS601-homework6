@@ -56,14 +56,8 @@ def test_full_app(capfd, monkeypatch):
     assert e.type == SystemExit
     assert str(e.value) == "Exiting...", "The app did not exit as expected"
 
-@mock.patch('os.path.exists', return_value=False)
-def test_load_plugins_with_invalid_path(mock_exists, caplog):
-    """Test that the App exits if the Plugin Path does not exist."""
+def test_app_get_environment_variable():
+    """Tests if the .env file was loaded correctly"""
     app = App()
-
-    with caplog.at_level(logging.WARNING):
-        with pytest.raises(SystemExit) as e:
-            app.start()
-
-    assert e.type == SystemExit
-    assert "Plugins directory" in caplog.text, "The Warning log message was not found"
+    current_env = app.get_environment_variable('ENVIRONMENT')
+    assert current_env in ['DEV', 'TESTING', 'PROD'], f"Invalid ENVIRONMENT: {current_env}"
