@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: PROD
 
+    env:
+      ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+      USERNAME: ${{ vars.USERNAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.10
