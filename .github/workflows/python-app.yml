@@ -9,6 +9,8 @@ on:
 permissions:
   contents: read
 
+env: PROD
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,6 +29,6 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest --pylint --cov
         run: |
-          echo "ENVIRONMENT: $ENVIRONMENT"
-          echo "USERNAME: $USERNAME"
+          echo "ENVIRONMENT: ${{ vars.ENVIRONMENT }}"
+          echo "USERNAME: ${{ vars.USERNAME }}"
           pytest --pylint --cov
