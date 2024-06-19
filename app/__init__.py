@@ -11,6 +11,7 @@ import pkgutil
 import importlib
 import sys
 from icecream import ic
+from dotenv import load_dotenv
 from app.commands import CommandHandler
 from app.commands import Command
 
@@ -21,6 +22,14 @@ class App:
     def __init__(self): # Constructor
         os.makedirs('logs', exist_ok=True)
         self.configure_logging()
+        load_dotenv()
+        self.settings = self.load_environment_variables()
+        if self.get_environment_variable("ENVIRONMENT") == "DEV": # pragma: no cover
+            logger = logging.getLogger()
+            logger.setLevel(logging.DEBUG)
+            for handler in logger.handlers:
+                handler.setLevel(logging.DEBUG)
+            logging.debug("Logging level set to DEBUG")
         self.command_handler = CommandHandler()
 
     def configure_logging(self):
@@ -30,9 +39,25 @@ class App:
         logging_conf_path = 'logging.conf'
         if os.path.exists(logging_conf_path):
             logging.config.fileConfig(logging_conf_path, disable_existing_loggers=False)
-        else:
-            logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-        logging.info("Logging configured with Level: %s.",logging.root.level)
+        else: # pragma: no cover
+            logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+        logging.info("Logging configured")
+
+    def load_environment_variables(self):
+        '''
+            Loads environment variables from .env file
+        '''
+        settings = {key: value for key, value in os.environ.items()}
+        logging.info("Environment variables loaded.")
+        return settings
+
+    def get_environment_variable(self, env_var: str = 'ENVIRONMENT'):
+        '''
+            Returns the specified environment variable 
+        '''
+        logging.info(self.settings.get(env_var, None))
+        return self.settings.get(env_var, None)
 
     def load_plugins(self):
         '''
@@ -40,7 +65,7 @@ class App:
         '''
         plugins_package = 'app.plugins'
         plugins_path = plugins_package.replace('.', '/')
-        if not os.path.exists(plugins_path):
+        if not os.path.exists(plugins_path): # pragma: no cover
             logging.warning("Plugins directory '%s' not found.", plugins_path)
             print("Plugins directory '%s' not found.", plugins_path)
             sys.exit(0)
